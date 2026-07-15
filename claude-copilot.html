@@ -38,6 +38,9 @@
   .gear{appearance:none; border:1px solid var(--line); background:var(--bg2); color:var(--muted);
     width:42px; height:42px; border-radius:12px; font-size:18px; display:grid; place-items:center; cursor:pointer}
   .gear:active{transform:scale(.94)}
+  .topright{display:flex; align-items:center; gap:10px}
+  .modelchip{font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--state); border:1px solid color-mix(in srgb,var(--state) 40%,var(--line)); padding:6px 10px; border-radius:999px; transition:color .4s ease,border-color .4s ease}
 
   /* center stage */
   .stage{flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px}
@@ -69,6 +72,15 @@
   .msg{padding:12px 15px; border-radius:16px; font-size:16px; line-height:1.5; max-width:88%; word-wrap:break-word}
   .me{align-self:flex-end; background:#1B222C; color:var(--ink); border-bottom-right-radius:5px}
   .ai{align-self:flex-start; background:transparent; color:var(--ink); border:1px solid var(--line); border-bottom-left-radius:5px}
+  .sources{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; padding-top:9px; border-top:1px solid var(--line)}
+  .src{font-size:12px; color:var(--blue); text-decoration:none; background:rgba(90,162,255,.09);
+    border:1px solid rgba(90,162,255,.25); padding:4px 9px; border-radius:8px; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .src:active{opacity:.7}
+  .conf{display:inline-block; font-family:'Chakra Petch',sans-serif; font-size:11px; letter-spacing:.12em;
+    text-transform:uppercase; font-weight:600; padding:3px 9px; border-radius:7px; margin-bottom:9px}
+  .conf-high{color:#06231b; background:var(--teal)}
+  .conf-moderate{color:#2e2205; background:var(--amber)}
+  .conf-low{color:#2a0d0d; background:var(--rose)}
   .empty{color:var(--muted); text-align:center; font-size:14px; padding:18px}
 
   /* state animations */
@@ -123,7 +135,10 @@
 
   <div class="top">
     <div class="brand">Co<b>pilot</b></div>
-    <button class="gear" id="gear" aria-label="Settings">⚙</button>
+    <div class="topright">
+      <span class="modelchip" id="modelchip" style="display:none"></span>
+      <button class="gear" id="gear" aria-label="Settings">⚙</button>
+    </div>
   </div>
 
   <div class="stage">
@@ -154,8 +169,9 @@
         <div>
           <label for="model">Model</label>
           <select id="model">
+            <option value="auto" selected>Auto — pick per question</option>
             <option value="claude-haiku-4-5-20251001">Haiku 4.5 — fastest</option>
-            <option value="claude-sonnet-4-6" selected>Sonnet 4.6 — balanced</option>
+            <option value="claude-sonnet-4-6">Sonnet 4.6 — balanced</option>
             <option value="claude-opus-4-8">Opus 4.8 — smartest</option>
           </select>
         </div>
@@ -164,9 +180,13 @@
           <select id="voice"></select>
         </div>
       </div>
+      <button type="button" class="hf on" id="ground" style="align-self:flex-start">
+        <span class="dot"></span><span id="groundLabel">Grounding on</span>
+      </button>
       <div>
         <label for="sys">How Claude should talk</label>
         <textarea id="sys"></textarea>
+        <button type="button" id="resetSys" style="appearance:none;background:none;border:none;color:var(--blue);font-size:13px;padding:8px 0 0;cursor:pointer">Reset to default (grounding + confidence cue)</button>
       </div>
       <p class="note">Your key is stored only on this device and sent straight to Anthropic. For real driving use, open this page in Chrome and choose <code>Add to Home screen</code> so the mic works and it launches like an app.</p>
       <button class="btn primary" id="save">Save</button>
@@ -186,7 +206,11 @@
   };
 
   const DEFAULT_SYS =
-    "You are a voice copilot the user talks to while driving. Keep replies short and conversational — usually one to three sentences. Speak the way a person speaks: no markdown, lists, headings, code, or emoji, because everything you say is read aloud. Lead with the key point, then offer to go deeper if it's complex. Be warm and direct.";
+    "You are a voice copilot the user talks to while driving, and you prioritize accuracy and well-sourced answers. " +
+    "GROUNDING: When a question turns on facts, current information, data, science, health, or anything checkable, use web search and rely on the most reputable sources you can find — peer-reviewed research, primary data, government and academic institutions, and established expert outlets — over blogs, forums, marketing, or SEO content. Prefer primary sources over summaries of them. " +
+    "RELIABILITY: Tell the user how solid the basis is. Flag out loud when a source is weak, contested, preliminary (a preprint or a single small study), anecdotal, or when experts disagree, and distinguish established consensus from early or fringe findings. If the evidence is thin or you're unsure, say so plainly instead of sounding confident. Never invent studies, statistics, quotes, or citations — if you can't find real support, say that. " +
+    "CONFIDENCE: Begin every factual or checkable answer by speaking one short confidence cue first — 'High confidence' when it's well established and backed by strong reputable sources, 'Moderate confidence' when support is reasonable but limited or partial, or 'Low confidence' when the evidence is thin, contested, preliminary, or from memory without solid sourcing — then a dash and your answer. Skip the cue entirely for casual conversation, greetings, or chit-chat. " +
+    "VOICE: Keep replies short and conversational, usually one to three sentences, the way a person speaks — no markdown, lists, headings, or emoji, since everything is read aloud. Attribute naturally out loud ('a 2024 review in Nature found…', 'according to NOAA…') and describe reliability in words; the screen shows the source links, so don't read URLs aloud. Lead with the key point, then offer to go deeper. Don't search for casual conversation or chit-chat.";
 
   const $ = id => document.getElementById(id);
   const body = document.body;
@@ -195,19 +219,22 @@
   const sheet = $('sheet');
   const keyEl=$('key'), modelEl=$('model'), voiceEl=$('voice'), sysEl=$('sys');
   const hfBtn=$('hf'), hfLabel=$('hfLabel');
+  const groundBtn=$('ground'), groundLabel=$('groundLabel');
 
   let state='idle';
   let handsFree = store.get('hf') !== '0';
+  let ground = store.get('ground') !== '0';
   let messages = [];            // {role, content}
   let recog=null, recognizing=false, finalText='';
   let voices=[], chosenVoice='';
 
   // ---- load settings ----
   keyEl.value = store.get('key') || '';
-  modelEl.value = store.get('model') || 'claude-sonnet-4-6';
+  modelEl.value = store.get('model') || 'auto';
   sysEl.value = store.get('sys') || DEFAULT_SYS;
   chosenVoice = store.get('voice') || '';
   setHandsFree(handsFree, true);
+  setGround(ground);
 
   // ---- speech synthesis (talk back) ----
   const synth = window.speechSynthesis;
@@ -286,6 +313,35 @@
     if(recog && recognizing){ try{ recog.stop(); }catch(e){} }
   }
 
+  // ---- model routing ----
+  const M_HAIKU='claude-haiku-4-5-20251001', M_SONNET='claude-sonnet-4-6', M_OPUS='claude-opus-4-8';
+
+  function chooseModel(text){
+    const t = text.toLowerCase().trim();
+    const n = t.split(/\s+/).filter(Boolean).length;
+    const heavy = /(analyz|compare|comparison|trade-?off|pros and cons|strateg|derive|prove|debug|algorithm|optimi[sz]e|refactor|architect|implication|step by step|walk me through|explain why|reason through|break down|weigh|nuance|forecast model)/;
+    const codey = /(\bcode\b|function|regex|python|javascript|kotlin|typescript|\bsql\b|stack trace|error message|compile|syntax|payload|drupal|backdrop)/;
+    const mathy = /(\d+\s*[\+\-\*\/\^%]\s*\d+|calculate|equation|integral|derivative|solve for|probability|permutation|pace|splits?)/;
+    const quick = /^(what('| i)?s|what is|who('| i)?s|who is|when|where|how (far|long|much|many|old|tall|fast)|convert|define|spell|translate|remind|hey|hi|hello|thanks|thank you|yes|no|stop|repeat|say that again)\b/;
+    if (heavy.test(t) || codey.test(t) || mathy.test(t) || n > 45) return M_OPUS;
+    if (quick.test(t) && n <= 12) return M_HAIKU;
+    return M_SONNET;
+  }
+  function pickModel(text){
+    const setting = store.get('model') || 'auto';
+    return setting === 'auto' ? chooseModel(text) : setting;
+  }
+  function shortName(m){
+    if(m.indexOf('haiku')>-1) return 'Haiku';
+    if(m.indexOf('opus')>-1) return 'Opus';
+    if(m.indexOf('sonnet')>-1) return 'Sonnet';
+    return m;
+  }
+  function showModel(m){
+    const chip=document.getElementById('modelchip');
+    chip.textContent=shortName(m); chip.style.display='inline-block';
+  }
+
   // ---- a conversational turn ----
   async function turn(userText){
     addMsg('user', userText);
@@ -298,8 +354,19 @@
       addMsg('assistant', m); speak(m, ()=>setState('idle')); openSheet(); return;
     }
 
-    setState('thinking'); hint.textContent='Thinking…';
+    const picked = pickModel(userText);
+    showModel(picked);
+    setState('thinking'); hint.textContent = ground ? 'Checking sources…' : 'Thinking…';
     try{
+      const reqBody = {
+        model: picked,
+        max_tokens: 1024,
+        system: store.get('sys')||DEFAULT_SYS,
+        messages
+      };
+      if(ground){
+        reqBody.tools = [{ type:'web_search_20250305', name:'web_search', max_uses:5 }];
+      }
       const res = await fetch('https://api.anthropic.com/v1/messages',{
         method:'POST',
         headers:{
@@ -308,12 +375,7 @@
           'anthropic-version':'2023-06-01',
           'anthropic-dangerous-direct-browser-access':'true'
         },
-        body: JSON.stringify({
-          model: store.get('model')||'claude-sonnet-4-6',
-          max_tokens: 1024,
-          system: store.get('sys')||DEFAULT_SYS,
-          messages
-        })
+        body: JSON.stringify(reqBody)
       });
       if(!res.ok){
         const errTxt = await res.text();
@@ -324,10 +386,14 @@
         addMsg('assistant', msg); speak(msg, finishTurn); return;
       }
       const data = await res.json();
-      const reply = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join(' ').trim()
+      const blocks = data.content || [];
+      const reply = blocks.filter(b=>b.type==='text').map(b=>b.text).join(' ').trim()
                     || "I didn't catch a response.";
+      const sources = extractSources(blocks);
+      const conf = confidenceOf(reply);
+      const shown = conf ? reply.replace(/^\s*(high|moderate|low)\s+confidence\s*[—–\-:]*\s*/i,'') : reply;
       messages.push({role:'assistant', content:reply});
-      addMsg('assistant', reply);
+      addMsg('assistant', shown, sources, conf);
       speak(reply, finishTurn);
     }catch(err){
       console.error(err);
@@ -351,11 +417,47 @@
       s==='error'?'Error':'Tap to talk';
   }
 
-  function addMsg(role, text){
+  function extractSources(blocks){
+    const out=[], seen=new Set();
+    const add=(url,title)=>{ if(url && !seen.has(url)){ seen.add(url); out.push({url, title:title||domainOf(url)}); } };
+    (blocks||[]).forEach(b=>{
+      if(b.type==='text' && Array.isArray(b.citations))
+        b.citations.forEach(c=>add(c.url, c.title));
+      if(b.type==='web_search_tool_result' && Array.isArray(b.content))
+        b.content.forEach(r=>add(r.url, r.title));
+    });
+    return out.slice(0,6);
+  }
+  function domainOf(url){ try{ return new URL(url).hostname.replace(/^www\./,''); }catch(e){ return url; } }
+
+  function confidenceOf(text){
+    const m = (text||'').match(/^\s*(high|moderate|low)\s+confidence\b/i);
+    return m ? m[1].toLowerCase() : null;
+  }
+
+  function addMsg(role, text, sources, conf){
     empty.style.display='none';
     const d=document.createElement('div');
     d.className='msg '+(role==='user'?'me':'ai');
-    d.textContent=text;
+    if(conf){
+      const c=document.createElement('span');
+      c.className='conf conf-'+conf;
+      c.textContent = conf+' confidence';
+      d.appendChild(c); d.appendChild(document.createElement('br'));
+    }
+    d.appendChild(document.createTextNode(text));
+    if(sources && sources.length){
+      const box=document.createElement('div');
+      box.className='sources';
+      sources.forEach(s=>{
+        const a=document.createElement('a');
+        a.href=s.url; a.target='_blank'; a.rel='noopener';
+        a.className='src'; a.textContent=domainOf(s.url);
+        a.title=s.title;
+        box.appendChild(a);
+      });
+      d.appendChild(box);
+    }
     scroll.appendChild(d);
     scroll.scrollTop=scroll.scrollHeight;
   }
@@ -364,6 +466,12 @@
     handsFree=on; store.set('hf', on?'1':'0');
     hfBtn.classList.toggle('on', on);
     hfLabel.textContent = on?'Hands-free on':'Hands-free off';
+  }
+
+  function setGround(on){
+    ground=on; store.set('ground', on?'1':'0');
+    groundBtn.classList.toggle('on', on);
+    groundLabel.textContent = on?'Grounding on':'Grounding off';
   }
 
   // ---- interactions ----
@@ -376,6 +484,8 @@
   orb.addEventListener('click', tap);
 
   hfBtn.addEventListener('click', ()=>setHandsFree(!handsFree));
+  groundBtn.addEventListener('click', ()=>setGround(!ground));
+  $('resetSys').addEventListener('click', ()=>{ sysEl.value = DEFAULT_SYS; });
 
   // settings sheet
   function openSheet(){ sheet.classList.add('open'); }
