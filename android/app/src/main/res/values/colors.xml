@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg">#0C0F14</color>
+    <color name="bg2">#11151C</color>
+    <color name="line">#1E242E</color>
+    <color name="ink">#ECEFF3</color>
+    <color name="muted">#7C8794</color>
+    <color name="amber">#F3A93C</color>
+    <color name="teal">#2FD3A5</color>
+    <color name="teal_ink">#06231B</color>
+    <color name="blue">#5AA2FF</color>
+    <color name="rose">#FF6B6B</color>
+    <color name="ic_launcher_background">#0C0F14</color>
+</resources>

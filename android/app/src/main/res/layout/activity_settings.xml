@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg2"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            style="@style/Copilot.Heading"
+            android:text="SETTINGS" />
+
+        <!-- API key -->
+        <TextView style="@style/Copilot.Label" android:text="Anthropic API key" />
+        <EditText
+            android:id="@+id/apiKey"
+            style="@style/Copilot.Field"
+            android:hint="sk-ant-…"
+            android:importantForAutofill="no"
+            android:inputType="textPassword" />
+        <TextView
+            style="@style/Copilot.Note"
+            android:text="Stored only on this phone, in Claude Copilot's private storage, and sent only to Anthropic. Set a monthly spend limit on this key in the Anthropic Console." />
+
+        <!-- Model -->
+        <TextView style="@style/Copilot.Label" android:text="Model" />
+        <Spinner
+            android:id="@+id/model"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/field_bg"
+            android:popupBackground="@color/bg2" />
+
+        <Switch
+            android:id="@+id/grounding"
+            style="@style/Copilot.Switch"
+            android:text="Grounding — search reputable sources and cite them" />
+
+        <!-- Listening -->
+        <TextView style="@style/Copilot.Label" android:text="When Copilot listens for “Hey Claude”" />
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/modeWhileOpen"
+                style="@style/Copilot.Radio"
+                android:text="Only while the app is open on screen" />
+
+            <RadioButton
+                android:id="@+id/modeAlways"
+                style="@style/Copilot.Radio"
+                android:text="Always, in the background (shows a notification; uses more battery)" />
+        </RadioGroup>
+        <TextView
+            style="@style/Copilot.Note"
+            android:text="Background listening starts when you open Claude Copilot and runs until you tap Stop in its notification. After restarting your phone, open Claude Copilot once to turn it back on — Android doesn't let apps start the microphone by themselves at boot." />
+
+        <Switch
+            android:id="@+id/wakeEnabled"
+            style="@style/Copilot.Switch"
+            android:text="Use the “Hey Claude” wake word" />
+
+        <TextView
+            android:id="@+id/sensitivityLabel"
+            style="@style/Copilot.Label" />
+        <SeekBar
+            android:id="@+id/sensitivity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="8dp" />
+
+        <!-- System prompt -->
+        <TextView style="@style/Copilot.Label" android:text="How Claude should talk" />
+        <EditText
+            android:id="@+id/systemPrompt"
+            style="@style/Copilot.Field"
+            android:gravity="top|start"
+            android:inputType="textMultiLine|textCapSentences"
+            android:minLines="5"
+            android:textSize="14sp" />
+        <Button
+            android:id="@+id/resetPrompt"
+            style="@style/Copilot.TextButton"
+            android:text="Reset to default (grounding + confidence cue)" />
+
+        <Button
+            android:id="@+id/save"
+            style="@style/Copilot.PrimaryButton"
+            android:layout_marginTop="18dp"
+            android:text="Save" />
+
+        <Button
+            android:id="@+id/clearConversation"
+            style="@style/Copilot.GhostButton"
+            android:layout_marginTop="10dp"
+            android:text="Clear conversation" />
+    </LinearLayout>
+</ScrollView>
