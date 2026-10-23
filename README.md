@@ -1,4 +1,4 @@
-# Copilot — talk to Claude like you talk to Gemini
+# Claude Copilot — talk to Claude like you talk to Gemini
 
 A hands-free voice assistant for Claude. You talk, Claude answers out loud, and you keep the
 conversation going without touching the phone. Answers are grounded in reputable sources,
@@ -9,7 +9,7 @@ There are two versions in this repo:
 | | Web app (`/`) | Android app (`/android`) |
 |---|---|---|
 | Install | Open in Chrome → **Install app** | Build in Android Studio, sideload |
-| Start it | Tap the icon, or "Hey Google, open Copilot" | Say **"Hey Claude"** |
+| Start it | Tap the icon, or "Hey Google, open Claude Copilot" | Say **"Hey Claude"** |
 | Listens in the background | No | Optional (setting) |
 | Works with the screen off | No | Yes, in "Always" mode |
 
@@ -23,7 +23,7 @@ Create a key at console.anthropic.com and set a monthly spend limit on it.
 1. Repo **Settings → Pages → Build and deployment → Deploy from a branch → `main` / `(root)`**.
 2. After a minute or two it's live at `https://andyanderso.github.io/claude-assistant/`.
 3. On your phone, open that link in **Chrome → ⋮ → Install app**, tap ⚙, paste your API key, allow the mic.
-4. Say **"Hey Google, open Copilot"**. It opens already listening ("Listen when opened" setting).
+4. Say **"Hey Google, open Claude Copilot"**. It opens already listening ("Listen when opened" setting).
 
 Notes:
 - Free GitHub Pages needs a public repo. That's fine: the key is typed into the app and kept in
@@ -39,15 +39,15 @@ Notes:
 
 - **"Hey Claude"** wakes it, using an on-device detector ([openWakeWord](https://github.com/dscripka/openWakeWord)).
   Audio is never sent anywhere until it hears the wake phrase.
-- **"Hey Google" keeps working.** Google stays your default assistant; Copilot runs its own separate listener.
+- **"Hey Google" keeps working.** Google stays your default assistant; Claude Copilot runs its own separate listener.
 - A chime plays, it listens, Claude answers out loud, then it listens for a follow-up.
   Stay silent or say **"that's all"** to end; it goes back to waiting for "Hey Claude".
 - Music and navigation audio pause while you talk.
 - **Listening mode** (Settings, or tap the chip on the main screen):
-  - **Only while the app is open** (default). It listens while Copilot is on screen and stops the
+  - **Only while the app is open** (default). It listens while Claude Copilot is on screen and stops the
     moment you leave. The screen stays awake while it's open, which suits a phone on the dash.
   - **Always, in the background.** It keeps listening with the screen off or other apps open, shows
-    a notification, and runs until you tap **Stop**. This costs battery. After a reboot, open Copilot
+    a notification, and runs until you tap **Stop**. This costs battery. After a reboot, open Claude Copilot
     once: Android 14+ doesn't let apps start the microphone on their own at boot.
 
 ### Step 1 — Train the "Hey Claude" model (≈1 hour, mostly waiting)
@@ -91,7 +91,7 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk  # -r replaces an exist
 These depend on your specific phone, so check them parked:
 
 - [ ] "Hey Claude" wakes it with music playing and with road noise.
-- [ ] "Hey Google, navigate to …" still works while Copilot is listening. The two listeners share the mic.
+- [ ] "Hey Google, navigate to …" still works while Claude Copilot is listening. The two listeners share the mic.
 - [ ] In **Always** mode, "Hey Claude" works with the screen off and the conversation completes.
       This relies on Google's speech recognizer accepting requests from a background service.
 - [ ] Audio comes through the car speakers over Bluetooth / Android Auto.
@@ -111,7 +111,7 @@ can get clipped.
 | `SettingsActivity.kt` | Key, model, grounding, listening mode, wake sensitivity, system prompt |
 | `wakeword/` | Vendored openWakeWord Android library (Apache-2.0); see `wakeword/VENDORED.md` |
 
-The API key lives in Copilot's private app storage, and backups are turned off so it doesn't get
+The API key lives in Claude Copilot's private app storage, and backups are turned off so it doesn't get
 copied to the cloud.
 
 ---
@@ -121,7 +121,7 @@ copied to the cloud.
 - **Not on the Android Auto screen, and not on the steering-wheel button.** Google restricts
   Android Auto to approved app categories and keeps the assistant button for its own assistant.
 - **The wake word costs battery.** Google's "Hey Google" runs on dedicated low-power hardware
-  that third-party apps can't use, so Copilot's listener runs on the main processor.
+  that third-party apps can't use, so Claude Copilot's listener runs on the main processor.
 - **Model routing is a keyword heuristic.** Pick a fixed model in Settings if you prefer.
 
 ## Licenses

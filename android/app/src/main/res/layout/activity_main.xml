@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- keepScreenOn: while Copilot is on screen (e.g. phone on the dash), the screen stays awake,
+<!-- keepScreenOn: while Claude Copilot is on screen (e.g. phone on the dash), the screen stays awake,
      so "Only while open" mode keeps listening for the whole drive. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:letterSpacing="0.16"
-            android:text="COPILOT"
+            android:text="CLAUDE COPILOT"
             android:textColor="@color/muted"
             android:textSize="13sp"
             android:textStyle="bold" />

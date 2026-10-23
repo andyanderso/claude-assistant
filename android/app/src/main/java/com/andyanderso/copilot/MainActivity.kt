@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
         } else {
             AssistantBus.phase.value = Phase.ERROR
             AssistantBus.hint.value =
-                "Copilot needs the microphone. Allow it in Settings → Apps → Copilot → Permissions."
+                "Claude Copilot needs the microphone. Allow it in Settings → Apps → Claude Copilot → Permissions."
         }
     }
 
@@ -107,7 +107,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onStop() {
         super.onStop()
-        // "Only while open": stop listening as soon as Copilot leaves the screen
+        // "Only while open": stop listening as soon as Claude Copilot leaves the screen
         // (home button, another app, or the screen turning off).
         if (prefs.listenOnlyWhileOpen && !isChangingConfigurations) {
             AssistantService.stop(this)

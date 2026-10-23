@@ -99,7 +99,7 @@ class SpeechIO(context: Context) : RecognitionListener {
         if (ttsState == 1) tts.stop()
     }
 
-    /** Short acknowledgement tone so you know Copilot heard "Hey Claude". */
+    /** Short acknowledgement tone so you know Claude Copilot heard "Hey Claude". */
     fun chime() {
         try {
             val tone = ToneGenerator(AudioManager.STREAM_MUSIC, 70)
@@ -196,7 +196,7 @@ class SpeechIO(context: Context) : RecognitionListener {
         when (error) {
             SpeechRecognizer.ERROR_NO_MATCH,
             SpeechRecognizer.ERROR_SPEECH_TIMEOUT -> nothing?.invoke()
-            SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> failed?.invoke("Copilot needs microphone permission.")
+            SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> failed?.invoke("Claude Copilot needs microphone permission.")
             SpeechRecognizer.ERROR_NETWORK,
             SpeechRecognizer.ERROR_NETWORK_TIMEOUT -> failed?.invoke("No connection for speech recognition.")
             SpeechRecognizer.ERROR_RECOGNIZER_BUSY -> failed?.invoke("The speech recognizer is busy. Try again.")

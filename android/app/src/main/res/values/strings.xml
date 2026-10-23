@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- This is the name Google listens for in "Hey Google, open Copilot".
+    <!-- This is the name Google listens for in "Hey Google, open Claude Copilot".
          If it collides with another app on your phone, change it here. -->
-    <string name="app_name">Copilot</string>
+    <string name="app_name">Claude Copilot</string>
 </resources>

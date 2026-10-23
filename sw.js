@@ -1,8 +1,8 @@
-// Copilot service worker.
+// Claude Copilot service worker.
 // Purpose: make the app installable and let the shell open with a weak signal.
 // It never touches calls to api.anthropic.com — those always go straight to the network.
 
-const CACHE = 'copilot-v1';   // bump this when you change icons or the manifest
+const CACHE = 'copilot-v2';   // bump this when you change icons or the manifest
 const SHELL = [
   './',
   './index.html',

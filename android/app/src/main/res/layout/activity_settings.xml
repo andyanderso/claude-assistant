@@ -25,7 +25,7 @@
             android:inputType="textPassword" />
         <TextView
             style="@style/Copilot.Note"
-            android:text="Stored only on this phone, in Copilot's private storage, and sent only to Anthropic. Set a monthly spend limit on this key in the Anthropic Console." />
+            android:text="Stored only on this phone, in Claude Copilot's private storage, and sent only to Anthropic. Set a monthly spend limit on this key in the Anthropic Console." />
 
         <!-- Model -->
         <TextView style="@style/Copilot.Label" android:text="Model" />
@@ -60,7 +60,7 @@
         </RadioGroup>
         <TextView
             style="@style/Copilot.Note"
-            android:text="Background listening starts when you open Copilot and runs until you tap Stop in its notification. After restarting your phone, open Copilot once to turn it back on — Android doesn't let apps start the microphone by themselves at boot." />
+            android:text="Background listening starts when you open Claude Copilot and runs until you tap Stop in its notification. After restarting your phone, open Claude Copilot once to turn it back on — Android doesn't let apps start the microphone by themselves at boot." />
 
         <Switch
             android:id="@+id/wakeEnabled"

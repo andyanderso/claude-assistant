@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0C0F14" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<title>Copilot — talk to Claude</title>
+<title>Claude Copilot</title>
 <link rel="manifest" href="manifest.webmanifest" />
 <link rel="icon" type="image/png" href="icons/icon-192.png" />
 <link rel="apple-touch-icon" href="icons/icon-192.png" />
@@ -137,7 +137,7 @@
 <body data-state="idle">
 
   <div class="top">
-    <div class="brand">Co<b>pilot</b></div>
+    <div class="brand">Claude <b>Copilot</b></div>
     <div class="topright">
       <span class="modelchip" id="modelchip" style="display:none"></span>
       <button class="gear" id="gear" aria-label="Settings">⚙</button>
@@ -196,7 +196,7 @@
         <textarea id="sys"></textarea>
         <button type="button" id="resetSys" style="appearance:none;background:none;border:none;color:var(--blue);font-size:13px;padding:8px 0 0;cursor:pointer">Reset to default (grounding + confidence cue)</button>
       </div>
-      <p class="note">Your key is stored only in this browser on this device and sent straight to Anthropic — it is never part of the website. Install from Chrome's menu (<code>Install app</code>), then say “Hey Google, open Copilot” to launch hands-free.</p>
+      <p class="note">Your key is stored only in this browser on this device and sent straight to Anthropic — it is never part of the website. Install from Chrome's menu (<code>Install app</code>), then say “Hey Google, open Claude Copilot” to launch hands-free.</p>
       <button class="btn primary" id="save">Save</button>
       <button class="btn ghost" id="clear">Clear conversation</button>
     </div>
@@ -498,7 +498,7 @@
   }
 
   // Start listening automatically when the app is launched or brought back to the
-  // front (e.g. "Hey Google, open Copilot"), so the whole flow stays hands-free.
+  // front (e.g. "Hey Google, open Claude Copilot"), so the whole flow stays hands-free.
   function maybeAutoListen(){
     if(!autoListen || !(store.get('key')||'').trim()) return;
     if(state!=='idle' || sheet.classList.contains('open')) return;

@@ -1,6 +1,6 @@
 {
-  "name": "Copilot",
-  "short_name": "Copilot",
+  "name": "Claude Copilot",
+  "short_name": "Claude Copilot",
   "description": "Hands-free voice conversations with Claude, grounded in reputable sources.",
   "id": "./",
   "start_url": "./",

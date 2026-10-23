@@ -14,7 +14,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Copilot"
+rootProject.name = "ClaudeCopilot"
 
 // :app      — the Copilot assistant itself
 // :wakeword — on-device "Hey Claude" detection (vendored openWakeWord Android library, Apache-2.0)

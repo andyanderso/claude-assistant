@@ -51,7 +51,7 @@ import kotlinx.coroutines.withContext
 class AssistantService : Service() {
 
     companion object {
-        private const val TAG = "Copilot"
+        private const val TAG = "ClaudeCopilot"
         const val ACTION_START = "com.andyanderso.copilot.START"   // begin / resume waiting for the wake word
         const val ACTION_TAP = "com.andyanderso.copilot.TAP"       // the orb was tapped
 
@@ -161,14 +161,14 @@ class AssistantService : Service() {
             // e.g. Android refused because the app wasn't on screen when this was started.
             Log.w(TAG, "Couldn't start listening service", e)
             AssistantBus.phase.value = Phase.ERROR
-            AssistantBus.hint.value = "Open Copilot to start listening."
+            AssistantBus.hint.value = "Open Claude Copilot to start listening."
             false
         }
     }
 
     private fun createChannel() {
         val channel = NotificationChannel(CHANNEL_ID, "Listening", NotificationManager.IMPORTANCE_LOW).apply {
-            description = "Shown while Copilot can hear you"
+            description = "Shown while Claude Copilot can hear you"
             setShowBadge(false)
         }
         getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
@@ -185,7 +185,7 @@ class AssistantService : Service() {
         )
         return NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle("Copilot")
+            .setContentTitle("Claude Copilot")
             .setContentText(text)
             .setOngoing(true)
             .setSilent(true)
