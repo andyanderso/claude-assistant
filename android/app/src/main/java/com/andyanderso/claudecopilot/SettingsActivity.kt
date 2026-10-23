@@ -1,4 +1,4 @@
-package com.andyanderso.copilot
+package com.andyanderso.claudecopilot
 
 import android.os.Bundle
 import android.widget.ArrayAdapter

@@ -1,4 +1,4 @@
-package com.andyanderso.copilot
+package com.andyanderso.claudecopilot
 
 import android.Manifest
 import android.app.Notification
@@ -52,8 +52,8 @@ class AssistantService : Service() {
 
     companion object {
         private const val TAG = "ClaudeCopilot"
-        const val ACTION_START = "com.andyanderso.copilot.START"   // begin / resume waiting for the wake word
-        const val ACTION_TAP = "com.andyanderso.copilot.TAP"       // the orb was tapped
+        const val ACTION_START = "com.andyanderso.claudecopilot.START"   // begin / resume waiting for the wake word
+        const val ACTION_TAP = "com.andyanderso.claudecopilot.TAP"       // the orb was tapped
 
         /** Train this with openWakeWord and drop it in app/src/main/assets/ (see README). */
         const val WAKE_MODEL_ASSET = "hey_claude.onnx"

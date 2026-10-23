@@ -1,4 +1,4 @@
-package com.andyanderso.copilot
+package com.andyanderso.claudecopilot
 
 import android.content.Context
 import android.content.SharedPreferences

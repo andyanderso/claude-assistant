@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.andyanderso.copilot"
+    namespace = "com.andyanderso.claudecopilot"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.andyanderso.copilot"
+        applicationId = "com.andyanderso.claudecopilot"
         minSdk = 26          // Android 8.0+
         targetSdk = 35
         versionCode = 1

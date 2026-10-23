@@ -1,4 +1,4 @@
-package com.andyanderso.copilot
+package com.andyanderso.claudecopilot
 
 import android.animation.ValueAnimator
 import android.content.Context

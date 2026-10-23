@@ -16,6 +16,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "ClaudeCopilot"
 
-// :app      — the Copilot assistant itself
+// :app      — the Claude Copilot assistant itself
 // :wakeword — on-device "Hey Claude" detection (vendored openWakeWord Android library, Apache-2.0)
 include(":app", ":wakeword")
